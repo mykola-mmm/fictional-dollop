@@ -22,12 +22,13 @@ class JobDataset:
         self.y_test = None
         self.labels_num = None
         self.label_mapping = {
-            0: 'Vice President',
-            1: 'Manager',
-            2: 'Individual Contributor/Staff',
-            3: 'Chief Officer',
-            4: 'Owner',
-            5: 'Director'}
+            0: 'Individual Contributor/Staff',
+            1: 'Director',
+            2: 'Vice President',
+            3: 'Manager',
+            4: 'Chief Officer',
+            5: 'Owner'
+        }
 
     def load_data(self):
         self.df = pd.read_excel(self.file_path)
@@ -181,10 +182,11 @@ class JobDataset:
             values = self.df[column].dropna().unique().tolist()
             unique_values.update(values)
         self.labels_num = len(unique_values)
-        self.label_mapping = {}  # Add this line to store the label mapping
         for i, value in enumerate(unique_values):
             one_hot_encoded[f'Label_{value}'] = self.df[columns_to_encode].eq(value).any(axis=1).astype(int)
-            self.label_mapping[i] = value  # Add this line to create the mapping
+        # Rearrange columns to match label_mapping order
+        ordered_columns = [f'Label_{self.label_mapping[i]}' for i in range(len(self.label_mapping))]
+        one_hot_encoded = one_hot_encoded[ordered_columns]
         self.df = pd.concat([self.df['Title'], one_hot_encoded], axis=1)
 
     def tokenize(self, text):
@@ -206,7 +208,6 @@ class JobDataset:
         y = self.df.drop('Title', axis=1).values
         X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=test_size, random_state=random_state)
 
-        # Tokenize the text data
         X_train_tokenized = []
         X_valid_tokenized = []
         
@@ -232,12 +233,8 @@ class JobDataset:
         )
 
     def predict_labels(self, prediction_array, threshold=0.5):
-        if len(prediction_array) != self.labels_num:
-            raise ValueError(f"Prediction array length ({len(prediction_array)}) does not match the number of labels ({self.labels_num})")
-        
         predicted_labels = []
         for i, prob in enumerate(prediction_array):
             if prob >= threshold:
                 predicted_labels.append(self.label_mapping[i])
-        
         return predicted_labels
