@@ -13,7 +13,7 @@ from utils.utils import plot_training_history
 
 MODEL_NAME = 'roberta-base'
 NUM_LABELS = 6
-EPOCH = 2
+EPOCH = 200
 PATIENCE_CALLBACK = 20
 LR_CALLBACK = 10
 LEARNING_RATE = 0.00001
