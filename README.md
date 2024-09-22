@@ -18,6 +18,12 @@ This project focuses on classifying job titles into multiple categories using a 
 >
 > The current approach utilizes transfer learning with a pre-trained transformer model (RoBERTa), fine-tuned for the job title classification task. More details on this approach are provided in the following sections.
 
+> **Note:** Project Notebooks
+>
+> - `notebooks/roberta.ipynb`: This notebook contains the code for fine-tuning the RoBERTa transformer model for job title classification.
+> - `notebooks/classifiers.ipynb`: This notebook includes the code for the ensemble of classifiers approach, along with minimal data analysis (single graph :) ).
+
+
 ## 0. How to run the code?
 
 ### Python Version
