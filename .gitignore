@@ -1,1 +1,4 @@
-*.xlsx
+*.xlsx*
+*__pycache__*
+p12venv/
+logs/
